@@ -3,31 +3,45 @@
   ActiveSalesforce is an extension to the Rails Framework that allows for the dynamic creation and management of 
   ActiveRecord objects through the use of Salesforce meta-data and uses a Salesforce.com organization as the backing store.
 
+== Status
+
+  This version is "tuned" towards Rails 2.2.2.  Other Rails releases haven't yet been tested.  The gem also depends upon builder; I'm using version 2.1.2.
+
+  All unit tests pass except the following errors:
+
+    test_batch_insert (wrong number of arguments (2 for 0))
+    test_find_addresses (INVALID_TYPE: sObject type 'Address__c' is not supported)
+    test_master_detail(INVALID_TYPE: sObject type 'Department__c' is not supported)
+
+  I'm currently working towards debugging these anomalies but wanted to put the present fixes "up there".
 
 == Getting started
 
-1. gem install activesalesforce
-2. if you have not already done so generate your initial rails app using "rails <myappname goes here>" 
-3. edit config/environment.rb and add "require_gem 'activesalesforce'" to the end of the "Rails::Initializer.run do |config|" block, e.g.
+Note: these are "edge" instructions for building and installing this version:
 
-		Rails::Initializer.run do |config|
-		  ...
-		  
-		  require 'activesalesforce'
-		end
-
-4. edit database.yml
+1. git clone git://github.com/oldfartdeveloper/activerecord-activesalesforce-adapter.git
+2. cd into the new directory created by the git command above.
+3. gem build activerecord-activesalesforce-adapter.gemspec.
+4. gem install activerecord-activesalesforce-adapter-2.2.2.gem
+5. if you have not already done so, generate your initial rails app using "rails <myappname goes here>" 
+6. edit database.yml:
 
 		adapter: activesalesforce
-  		url: https://www.salesforce.com
+  		url: https://login.salesforce.com/services/Soap/u/16.0
   		username: <salesforce user name goes here>
   		password: <salesforce password goes here>
   		
-  		NOTE: If you want to access your Salesforce Sandbox account use https://test.salesforce.com as your url instead
+  		NOTE: Since this isn't (completely) working software, I presume this is your "test" account.  DON'T use this on your production account.
+
+7. If you are (also) debugging using the unit tests provided by the package, then update the following file similarly to the above:
+
+		test/unit/config.yml
   		
-5. proceed using standard Rails development techniques!  	
+8. proceed using standard Rails development techniques!  	
 
 == Advanced Features
+
+(oldfartdeveloper note: I haven't specifically tested these.)
 
   1. Session ID based Authentication: Add the following to /app/controllers/application.rb to enable SID auth for all controllers
   

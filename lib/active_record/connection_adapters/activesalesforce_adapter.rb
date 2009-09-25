@@ -689,17 +689,26 @@ module ActiveRecord
             reference_to = reference_to.chomp("__c").capitalize if reference_to.match(/__c$/)
             
             begin
+              
               referenced_klass = class_from_entity_name(reference_to)
+              
             rescue NameError => e
                 # Automatically create a least a stub for the referenced entity
                 debug("   Creating ActiveRecord stub for the referenced entity '#{reference_to}'")
                 
                 referenced_klass = klass.class_eval("::#{reference_to} = Class.new(ActiveRecord::Base)")
-                
+                                                
                 # Automatically inherit the connection from the referencee
-                def referenced_klass.connection
-                  klass.connection
+                class << referenced_klass
+                  def set_connection_special(connection)
+                    @@konnection = connection
+                  end
+                  def connection
+                    @@konnection
+                  end
                 end
+                
+                referenced_klass.set_connection_special klass.connection
             end
             
             if referenced_klass

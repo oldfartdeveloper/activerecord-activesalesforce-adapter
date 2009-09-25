@@ -1,5 +1,5 @@
 adapter: activesalesforce
-url: https://test.salesforce.com
-username: dutch@activesalesforce.com
-password: 
+url: https://login.salesforce.com/services/Soap/u/16.0
+username: <your user name>
+password: <your password><your security token>
 recording: true
