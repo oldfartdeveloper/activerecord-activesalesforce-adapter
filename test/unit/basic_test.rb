@@ -168,10 +168,10 @@ module Asf
         c2 = Contact.new(:first_name => 'FN2', :last_name => 'LN2')
         c3 = Contact.new(:first_name => 'FN3', :last_name => 'LN3')
 
-        Contact.transaction(c1, c2) do
-          c1.save
-          c2.save
-        end
+       Contact.transaction do
+         c1.save
+         c2.save
+       end
         
         c3.save
 
@@ -179,12 +179,12 @@ module Asf
         c2.first_name << '_2'        
         c3.first_name << '_2'        
 
-        Contact.transaction(c1, c2) do
+        Contact.transaction do
           c1.save
           c2.save
         end
         
-        Contact.transaction(c1, c2) do
+        Contact.transaction do
           c3.save
         
           c3.destroy
